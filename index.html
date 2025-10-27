@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevHub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f4f5f8;
+            color: #333;
+        }
+
+        /* Barra superior */
+        .navbar {
+            background-color: #2f3640;
+            color: white;
+            padding: 15px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .menu {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+        }
+
+        .menu li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .menu li a:hover {
+            text-decoration: underline;
+        }
+
+        /* Layout principal */
+        .container {
+            display: grid;
+            grid-template-columns: 25% 50% 25%;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* Sidebar esquerda */
+        .sidebar {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .sidebar img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-bottom: 15px;
+        }
+
+        .btn {
+            background-color: #00a8ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            background-color: #0097e6;
+        }
+
+        /* Feed */
+        .feed {
+            background-color: transparent;
+        }
+
+        .novo-post {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+
+        .novo-post button {
+            background-color: #00a8ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .novo-post button:hover {
+            background-color: #0097e6;
+        }
+
+        .form-postagem {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .form-postagem input,
+        .form-postagem textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+
+        .form-postagem button {
+            align-self: flex-end;
+            background-color: #00a8ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .form-postagem button:hover {
+            background-color: #0097e6;
+        }
+
+        .oculto {
+            display: none;
+        }
+
+        .post {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .post h3 {
+            color: #273c75;
+            margin-bottom: 8px;
+        }
+
+        .post-footer {
+            margin-top: 15px;
+        }
+
+        .post-footer button {
+            background: none;
+            border: none;
+            color: #0097e6;
+            cursor: pointer;
+            font-weight: bold;
+            margin-right: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .post-footer button:hover {
+            text-decoration: underline;
+        }
+
+        /* Contador de curtidas */
+        .like-count {
+            margin-left: 6px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* Comentários */
+        .comment-section {
+            margin-top: 15px;
+            border-top: 1px solid #ddd;
+            padding-top: 10px;
+        }
+
+        .comment {
+            background-color: #f1f2f6;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .comment-input {
+            display: flex;
+            margin-top: 10px;
+            gap: 5px;
+        }
+
+        .comment-input input {
+            flex: 1;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        .comment-input button {
+            background-color: #00a8ff;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .comment-input button:hover {
+            background-color: #0097e6;
+        }
+
+        /* Barra direita */
+        .rightbar {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .rightbar ul {
+            list-style: none;
+        }
+
+        .rightbar li {
+            font-size: 0.9em;
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        /* Pequenas responsividades */
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 10px;
+            }
+            .novo-post {
+                text-align: left;
+            }
+        }
+
+        /* Notificações */
+        .badge {
+            background-color: #e84118;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.8em;
+            margin-left: 5px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 12px;
+            width: 80%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: black;
+        }
+
+        .notificacao {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
+
+        .notificacao:hover {
+            background-color: #f8f9fa;
+        }
+
+        .notificacao.nao-lida {
+            background-color: #e3f2fd;
+            font-weight: bold;
+        }
+
+        .notificacao-tipo {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .usuario-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .btn-seguir {
+            background-color: #00a8ff;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9em;
+        }
+
+        .btn-seguir:hover {
+            background-color: #0097e6;
+        }
+
+        .btn-seguir.seguindo {
+            background-color: #27ae60;
+        }
+
+        .btn-seguir.seguindo:hover {
+            background-color: #229954;
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra superior -->
+    <nav class="navbar">
+        <div class="logo">DevHub</div>
+        <ul class="menu">
+            <li><a href="#" onclick="logout()">Sair</a></li>
+            <li><a href="#" onclick="mostrarPerfil()">Perfil</a></li>
+            <li><a href="#" onclick="mostrarNotificacoes()">Notificações <span id="notifBadge" class="badge" style="display:none;"></span></a></li>
+        </ul>
+    </nav>
+
+    <!-- Container geral -->
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <img id="fotoPerfil" src="https://via.placeholder.com/100" alt="Foto de perfil">
+            <div style="margin-top:10px;">
+                <input type="file" id="uploadFoto" accept="image/*" style="width:100%;">
+            </div>
+            <h2 id="nomeUsuario">Carregando...</h2>
+            <p><strong>Idade:</strong> 22 anos</p>
+            <p><strong>Profissão:</strong> Estudante de TI</p>
+            <p><strong>Local:</strong> Recife - PE</p>
+            <button class="btn" id="btnEditarPerfil">Editar Perfil</button>
+            <div style="margin-top:10px;">
+                <button class="btn" id="btnResetFoto" style="background:#e84118;">Resetar Foto</button>
+            </div>
+        </aside>
+
+        <!-- Feed principal -->
+        <main class="feed">
+            <div class="novo-post">
+                <button id="novaPostagemBtn">+ Criar Nova Postagem</button>
+            </div>
+
+            <!-- Formulário nova postagem -->
+            <div id="formNovaPostagem" class="form-postagem oculto">
+                <textarea id="textoPost" placeholder="O que deseja compartilhar?"></textarea>
+                <button id="enviarPost">Publicar</button>
+            </div>
+
+            <!-- Posts serão carregados dinamicamente do banco de dados -->
+        </main>
+
+        <!-- Barra direita -->
+        <aside class="rightbar">
+            <h3>Atividades Recentes</h3>
+            <ul>
+                <li>Maria comentou em sua postagem</li>
+                <li>Lucas curtiu seu perfil</li>
+                <li>Você ganhou 3 novos seguidores</li>
+            </ul>
+        </aside>
+    </div>
+
+    <!-- Modal de Notificações -->
+    <div id="modalNotificacoes" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="fecharModal('modalNotificacoes')">&times;</span>
+            <h2>Notificações</h2>
+            <div id="listaNotificacoes"></div>
+        </div>
+    </div>
+
+    <!-- Modal de Perfil -->
+    <div id="modalPerfil" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="fecharModal('modalPerfil')">&times;</span>
+            <h2>Perfil</h2>
+            <div id="perfilContent">
+                <h3>Seguidores</h3>
+                <div id="listaSeguidores"></div>
+                <h3>Seguindo</h3>
+                <div id="listaSeguindo"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ---------- VERIFICAÇÃO DE AUTENTICAÇÃO ----------
+        const usuarioLogado = JSON.parse(localStorage.getItem('usuario') || 'null');
+        
+        if (!usuarioLogado) {
+            window.location.href = '/login';
+        }
+
+        // ---------- FUNÇÃO DE LOGOUT ----------
+        function logout() {
+            localStorage.removeItem('usuario');
+            window.location.href = '/login';
+        }
+
+        // ---------- FUNÇÕES DE MODAL ----------
+        function fecharModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // ---------- FUNÇÕES DE NOTIFICAÇÕES ----------
+        async function mostrarNotificacoes() {
+            try {
+                const response = await fetch(`/notificacoes/${usuarioLogado.id}`);
+                if (response.ok) {
+                    const notificacoes = await response.json();
+                    const lista = document.getElementById('listaNotificacoes');
+                    
+                    if (notificacoes.length === 0) {
+                        lista.innerHTML = '<p>Nenhuma notificação</p>';
+                    } else {
+                        lista.innerHTML = notificacoes.map(notif => `
+                            <div class="notificacao ${notif.lida ? '' : 'nao-lida'}" onclick="marcarComoLida(${notif.id})">
+                                <div class="notificacao-tipo">${notif.tipo}</div>
+                                <div>${notif.texto}</div>
+                                <div style="font-size: 0.8em; color: #999; margin-top: 5px;">
+                                    ${new Date(notif.created_at).toLocaleString()}
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+                    
+                    document.getElementById('modalNotificacoes').style.display = 'block';
+                    atualizarBadgeNotificacoes();
+                }
+            } catch (error) {
+                console.error('Erro ao carregar notificações:', error);
+            }
+        }
+
+        async function marcarComoLida(id) {
+            try {
+                await fetch(`/notificacoes/${id}/lida`, { method: 'PUT' });
+                atualizarBadgeNotificacoes();
+            } catch (error) {
+                console.error('Erro ao marcar notificação como lida:', error);
+            }
+        }
+
+        async function atualizarBadgeNotificacoes() {
+            try {
+                const response = await fetch(`/notificacoes/${usuarioLogado.id}`);
+                if (response.ok) {
+                    const notificacoes = await response.json();
+                    const naoLidas = notificacoes.filter(n => !n.lida).length;
+                    const badge = document.getElementById('notifBadge');
+                    
+                    if (naoLidas > 0) {
+                        badge.textContent = naoLidas;
+                        badge.style.display = 'inline';
+                    } else {
+                        badge.style.display = 'none';
+                    }
+                }
+            } catch (error) {
+                console.error('Erro ao atualizar badge:', error);
+            }
+        }
+
+        // ---------- FUNÇÕES DE PERFIL E SEGUIDORES ----------
+        async function mostrarPerfil() {
+            try {
+                const [seguidoresRes, seguindoRes] = await Promise.all([
+                    fetch(`/seguidores/${usuarioLogado.id}`),
+                    fetch(`/seguindo/${usuarioLogado.id}`)
+                ]);
+                
+                if (seguidoresRes.ok && seguindoRes.ok) {
+                    const seguidores = await seguidoresRes.json();
+                    const seguindo = await seguindoRes.json();
+                    
+                    document.getElementById('listaSeguidores').innerHTML = 
+                        seguidores.map(s => `
+                            <div class="usuario-item">
+                                <span>${s.nome}</span>
+                                <button class="btn-seguir" onclick="seguirUsuario(${s.id_seguidor})">
+                                    Ver Perfil
+                                </button>
+                            </div>
+                        `).join('');
+                    
+                    document.getElementById('listaSeguindo').innerHTML = 
+                        seguindo.map(s => `
+                            <div class="usuario-item">
+                                <span>${s.nome}</span>
+                                <button class="btn-seguir seguindo" onclick="deixarDeSeguir(${s.id_seguido})">
+                                    Seguindo
+                                </button>
+                            </div>
+                        `).join('');
+                    
+                    document.getElementById('modalPerfil').style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Erro ao carregar perfil:', error);
+            }
+        }
+
+        async function seguirUsuario(idUsuario) {
+            try {
+                const response = await fetch('/seguir', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id_seguidor: usuarioLogado.id,
+                        id_seguido: idUsuario,
+                        nome_seguidor: usuarioLogado.nome
+                    })
+                });
+                
+                if (response.ok) {
+                    alert('Usuário seguido com sucesso!');
+                    mostrarPerfil(); // Recarregar lista
+                } else {
+                    const error = await response.json();
+                    alert(error.error);
+                }
+            } catch (error) {
+                console.error('Erro ao seguir usuário:', error);
+            }
+        }
+
+        async function deixarDeSeguir(idUsuario) {
+            try {
+                const response = await fetch('/seguir', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id_seguidor: usuarioLogado.id,
+                        id_seguido: idUsuario
+                    })
+                });
+                
+                if (response.ok) {
+                    alert('Deixou de seguir o usuário');
+                    mostrarPerfil(); // Recarregar lista
+                }
+            } catch (error) {
+                console.error('Erro ao deixar de seguir:', error);
+            }
+        }
+
+        // ---------- CARREGAR POSTS DO BANCO ----------
+        async function carregarPosts() {
+            try {
+                const response = await fetch('/posts');
+                if (response.ok) {
+                    const posts = await response.json();
+                    const feed = document.querySelector('.feed');
+                    
+                    // Remove posts existentes (exceto o formulário)
+                    const postsExistentes = feed.querySelectorAll('.post');
+                    postsExistentes.forEach(post => post.remove());
+                    
+                    // Adiciona posts do banco
+                    posts.forEach(post => {
+                        const postElement = document.createElement('div');
+                        postElement.classList.add('post');
+                        postElement.setAttribute('data-id', post.id);
+                        postElement.innerHTML = `
+                            <h3>${escapeHtml(post.autor_nome)}</h3>
+                            <p>${escapeHtml(post.texto)}</p>
+                            <div class="post-footer">
+                                <button class="like-btn" aria-pressed="false">👍 Curtir <span class="like-count"></span></button>
+                                <button class="comment-btn">💬 Comentar</button>
+                            </div>
+                            <div class="comment-section"></div>
+                        `;
+                        
+                        // Insere após o formulário
+                        const referencia = feed.children[2];
+                        if (referencia) {
+                            feed.insertBefore(postElement, referencia);
+                        } else {
+                            feed.appendChild(postElement);
+                        }
+                        
+                        ativarComentarios(postElement);
+                        ativarCurtidas(postElement);
+                    });
+                }
+            } catch (error) {
+                console.error('Erro ao carregar posts:', error);
+            }
+        }
+
+        // Carregar posts quando a página carregar
+        carregarPosts();
+        
+        // Carregar notificações quando a página carregar
+        atualizarBadgeNotificacoes();
+
+        // ---------- UTIL: geração de ID único para novos posts ----------
+        function gerarIdPost() {
+            return 'post-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+        }
+
+        // ---------- COMENTÁRIOS ----------
+        function ativarComentarios(post) {
+            const commentBtn = post.querySelector('.comment-btn');
+
+            commentBtn.addEventListener('click', () => {
+                let commentSection = post.querySelector('.comment-section');
+
+                // Evita duplicar o campo de comentário
+                if (post.querySelector('.comment-input')) return;
+
+                const inputDiv = document.createElement('div');
+                inputDiv.classList.add('comment-input');
+                inputDiv.innerHTML = `
+                    <input type="text" placeholder="Escreva um comentário..." />
+                    <button>Enviar</button>
+                `;
+
+                commentSection.appendChild(inputDiv);
+
+                const input = inputDiv.querySelector('input');
+                const sendBtn = inputDiv.querySelector('button');
+
+                sendBtn.addEventListener('click', async () => {
+                    const text = input.value.trim();
+                    if (text !== "") {
+                        const postId = post.getAttribute('data-id');
+                        
+                        try {
+                            const response = await fetch('/comentarios', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    id_post: postId,
+                                    id_usuario: usuarioLogado.id,
+                                    texto: text,
+                                    nome_usuario: usuarioLogado.nome
+                                })
+                            });
+
+                            if (response.ok) {
+                                const comment = document.createElement('div');
+                                comment.classList.add('comment');
+                                comment.textContent = `${usuarioLogado.nome}: ${text}`;
+                                commentSection.insertBefore(comment, inputDiv);
+                                input.value = "";
+                            } else {
+                                alert('Erro ao adicionar comentário');
+                            }
+                        } catch (error) {
+                            alert('Erro de conexão');
+                        }
+                    }
+                });
+            });
+        }
+
+        // ---------- CURTIDAS (conectado com banco de dados) ----------
+        async function ativarCurtidas(post) {
+            const likeBtn = post.querySelector('.like-btn');
+            const countSpan = post.querySelector('.like-count');
+
+            // garante que o post tem um id persistente
+            let id = post.getAttribute('data-id');
+            if (!id) {
+                id = gerarIdPost();
+                post.setAttribute('data-id', id);
+            }
+
+            // Carrega curtidas do banco
+            async function carregarCurtidas() {
+                try {
+                    const response = await fetch(`/curtidas/${id}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        countSpan.textContent = data.count > 0 ? `(${data.count})` : '';
+                    }
+                } catch (error) {
+                    console.error('Erro ao carregar curtidas:', error);
+                }
+            }
+
+            // atualiza UI
+            function atualizarUI(liked) {
+                likeBtn.style.color = liked ? "#0097e6" : "#333";
+                likeBtn.setAttribute('aria-pressed', liked ? 'true' : 'false');
+            }
+
+            // click handler
+            likeBtn.addEventListener('click', async () => {
+                try {
+                    const response = await fetch('/curtidas', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            id_post: id,
+                            id_usuario: usuarioLogado.id,
+                            nome_usuario: usuarioLogado.nome
+                        })
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        atualizarUI(data.liked);
+                        await carregarCurtidas();
+                    } else {
+                        alert('Erro ao curtir post');
+                    }
+                } catch (error) {
+                    alert('Erro de conexão');
+                }
+            });
+
+            // Carrega curtidas iniciais
+            await carregarCurtidas();
+        }
+
+        // ---------- Inicializa funcionalidades em posts existentes ----------
+        document.querySelectorAll('.post').forEach(post => {
+            // se algum post inicial não tiver data-id, garante um
+            if (!post.getAttribute('data-id')) {
+                post.setAttribute('data-id', gerarIdPost());
+            }
+            ativarComentarios(post);
+            ativarCurtidas(post);
+        });
+
+        // ---------- NOVA POSTAGEM ----------
+        const novaPostagemBtn = document.getElementById('novaPostagemBtn');
+        const formNovaPostagem = document.getElementById('formNovaPostagem');
+        const enviarPost = document.getElementById('enviarPost');
+        const feed = document.querySelector('.feed');
+
+        novaPostagemBtn.addEventListener('click', () => {
+            formNovaPostagem.classList.toggle('oculto');
+            const textarea = document.getElementById('textoPost');
+            if (!formNovaPostagem.classList.contains('oculto')) {
+                textarea.focus();
+            }
+        });
+
+        enviarPost.addEventListener('click', async () => {
+            const texto = document.getElementById('textoPost').value.trim();
+
+            if (texto === "") {
+                alert("Preencha o campo de texto!");
+                return;
+            }
+
+            try {
+                const response = await fetch('/posts', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id_usuario: usuarioLogado.id,
+                        texto: texto
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    const novoPost = document.createElement('div');
+                    novoPost.classList.add('post');
+                    novoPost.setAttribute('data-id', data.id);
+                    novoPost.innerHTML = `
+                        <h3>${escapeHtml(usuarioLogado.nome)}</h3>
+                        <p>${escapeHtml(texto)}</p>
+                        <div class="post-footer">
+                            <button class="like-btn" aria-pressed="false">👍 Curtir <span class="like-count"></span></button>
+                            <button class="comment-btn">💬 Comentar</button>
+                        </div>
+                        <div class="comment-section"></div>
+                    `;
+
+                    // Insere no feed (logo abaixo do formulário)
+                    const referencia = feed.children[2];
+                    if (referencia) {
+                        feed.insertBefore(novoPost, referencia);
+                    } else {
+                        feed.appendChild(novoPost);
+                    }
+
+                    ativarComentarios(novoPost);
+                    ativarCurtidas(novoPost);
+
+                    document.getElementById('textoPost').value = "";
+                    formNovaPostagem.classList.add('oculto');
+                } else {
+                    alert('Erro ao criar post');
+                }
+            } catch (error) {
+                alert('Erro de conexão');
+            }
+        });
+
+        // Função simples para escapar HTML (evita XSS básico em exemplo)
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return String(text).replace(/[&<>"']/g, function(m) { return map[m]; });
+        }
+
+        // ---------- UPLOAD E ARMAZENAMENTO DA FOTO DE PERFIL ----------
+        const uploadFoto = document.getElementById('uploadFoto');
+        const fotoPerfil = document.getElementById('fotoPerfil');
+        const btnResetFoto = document.getElementById('btnResetFoto');
+
+        // Carrega imagem guardada (se existir)
+        const fotoSalva = localStorage.getItem('fotoPerfil');
+        if (fotoSalva) {
+            fotoPerfil.src = fotoSalva;
+        }
+
+        uploadFoto.addEventListener('change', function () {
+            const file = this.files[0];
+            if (!file) return;
+
+            // limite simples (ex.: 3MB)
+            const maxSize = 3 * 1024 * 1024;
+            if (file.size > maxSize) {
+                alert('Imagem muito grande. Limite: 3MB.');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                fotoPerfil.src = e.target.result;
+                try {
+                    localStorage.setItem('fotoPerfil', e.target.result);
+                } catch (err) {
+                    // localStorage pode falhar se a imagem for muito grande
+                    console.warn('Não foi possível salvar a imagem no localStorage:', err);
+                }
+            };
+            reader.readAsDataURL(file);
+        });
+
+        btnResetFoto.addEventListener('click', () => {
+            localStorage.removeItem('fotoPerfil');
+            fotoPerfil.src = 'https://via.placeholder.com/100';
+        });
+
+        // ---------- Opção: Atualizar nome do usuário via botão Editar Perfil (simples modal) ----------
+        const btnEditarPerfil = document.getElementById('btnEditarPerfil');
+        const nomeUsuario = document.getElementById('nomeUsuario');
+
+        // carrega dados do usuário logado
+        nomeUsuario.textContent = usuarioLogado.nome;
+
+        btnEditarPerfil.addEventListener('click', () => {
+            const novoNome = prompt('Digite seu nome:', nomeUsuario.textContent || '');
+            if (novoNome !== null) {
+                const nomeTrim = novoNome.trim();
+                if (nomeTrim.length > 0) {
+                    nomeUsuario.textContent = nomeTrim;
+                    // Atualizar no localStorage e backend
+                    usuarioLogado.nome = nomeTrim;
+                    localStorage.setItem('usuario', JSON.stringify(usuarioLogado));
+                    
+                    // Atualizar no backend
+                    fetch(`/usuarios/${usuarioLogado.id}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            nome: nomeTrim,
+                            email: usuarioLogado.email,
+                            senha: '' // Não enviar senha vazia
+                        })
+                    });
+                } else {
+                    alert('Nome vazio não é válido.');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
