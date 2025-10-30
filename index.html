@@ -4,356 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DevHub</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Segoe UI", Arial, sans-serif;
-        }
-
-        body {
-            background-color: #f4f5f8;
-            color: #333;
-        }
-
-        /* Barra superior */
-        .navbar {
-            background-color: #2f3640;
-            color: white;
-            padding: 15px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.5em;
-            font-weight: bold;
-        }
-
-        .menu {
-            list-style: none;
-            display: flex;
-            gap: 25px;
-        }
-
-        .menu li a {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .menu li a:hover {
-            text-decoration: underline;
-        }
-
-        /* Layout principal */
-        .container {
-            display: grid;
-            grid-template-columns: 25% 50% 25%;
-            gap: 20px;
-            max-width: 1200px;
-            margin: 30px auto;
-            padding: 0 20px;
-        }
-
-        /* Sidebar esquerda */
-        .sidebar {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-
-        .sidebar img {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-            border-radius: 50%;
-            margin-bottom: 15px;
-        }
-
-        .btn {
-            background-color: #00a8ff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        .btn:hover {
-            background-color: #0097e6;
-        }
-
-        /* Feed */
-        .feed {
-            background-color: transparent;
-        }
-
-        .novo-post {
-            text-align: right;
-            margin-bottom: 20px;
-        }
-
-        .novo-post button {
-            background-color: #00a8ff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        .novo-post button:hover {
-            background-color: #0097e6;
-        }
-
-        .form-postagem {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 0 8px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .form-postagem input,
-        .form-postagem textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 1em;
-        }
-
-        .form-postagem button {
-            align-self: flex-end;
-            background-color: #00a8ff;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        .form-postagem button:hover {
-            background-color: #0097e6;
-        }
-
-        .oculto {
-            display: none;
-        }
-
-        .post {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 0 8px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-        }
-
-        .post h3 {
-            color: #273c75;
-            margin-bottom: 8px;
-        }
-
-        .post-footer {
-            margin-top: 15px;
-        }
-
-        .post-footer button {
-            background: none;
-            border: none;
-            color: #0097e6;
-            cursor: pointer;
-            font-weight: bold;
-            margin-right: 10px;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .post-footer button:hover {
-            text-decoration: underline;
-        }
-
-        /* Contador de curtidas */
-        .like-count {
-            margin-left: 6px;
-            font-weight: 600;
-            color: #333;
-        }
-
-        /* Comentários */
-        .comment-section {
-            margin-top: 15px;
-            border-top: 1px solid #ddd;
-            padding-top: 10px;
-        }
-
-        .comment {
-            background-color: #f1f2f6;
-            padding: 8px 12px;
-            border-radius: 8px;
-            margin-bottom: 8px;
-        }
-
-        .comment-input {
-            display: flex;
-            margin-top: 10px;
-            gap: 5px;
-        }
-
-        .comment-input input {
-            flex: 1;
-            padding: 8px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-        }
-
-        .comment-input button {
-            background-color: #00a8ff;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-
-        .comment-input button:hover {
-            background-color: #0097e6;
-        }
-
-        /* Barra direita */
-        .rightbar {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-
-        .rightbar ul {
-            list-style: none;
-        }
-
-        .rightbar li {
-            font-size: 0.9em;
-            color: #555;
-            margin-bottom: 8px;
-        }
-
-        /* Pequenas responsividades */
-        @media (max-width: 900px) {
-            .container {
-                grid-template-columns: 1fr;
-                padding: 10px;
-            }
-            .novo-post {
-                text-align: left;
-            }
-        }
-
-        /* Notificações */
-        .badge {
-            background-color: #e84118;
-            color: white;
-            border-radius: 50%;
-            padding: 2px 6px;
-            font-size: 0.8em;
-            margin-left: 5px;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-        }
-
-        .modal-content {
-            background-color: white;
-            margin: 5% auto;
-            padding: 20px;
-            border-radius: 12px;
-            width: 80%;
-            max-width: 600px;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .close:hover {
-            color: black;
-        }
-
-        .notificacao {
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-            cursor: pointer;
-        }
-
-        .notificacao:hover {
-            background-color: #f8f9fa;
-        }
-
-        .notificacao.nao-lida {
-            background-color: #e3f2fd;
-            font-weight: bold;
-        }
-
-        .notificacao-tipo {
-            font-size: 0.9em;
-            color: #666;
-            margin-bottom: 5px;
-        }
-
-        .usuario-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .btn-seguir {
-            background-color: #00a8ff;
-            color: white;
-            border: none;
-            padding: 5px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 0.9em;
-        }
-
-        .btn-seguir:hover {
-            background-color: #0097e6;
-        }
-
-        .btn-seguir.seguindo {
-            background-color: #27ae60;
-        }
-
-        .btn-seguir.seguindo:hover {
-            background-color: #229954;
-        }
-    </style>
+   <link rel="stylesheet" href="style.css">
+   <script src="app.js"></script>
 </head>
 <body>
     <!-- Barra superior -->
@@ -363,6 +15,7 @@
             <li><a href="#" onclick="logout()">Sair</a></li>
             <li><a href="#" onclick="mostrarPerfil()">Perfil</a></li>
             <li><a href="#" onclick="mostrarNotificacoes()">Notificações <span id="notifBadge" class="badge" style="display:none;"></span></a></li>
+            <li><a href="#" onclick="deleteUser()">Deletar conta</a></li>
         </ul>
     </nav>
 
@@ -936,6 +589,29 @@
                 }
             }
         });
+
+        // ---------- deletar usuário ----------
+
+        async function deleteUser() {
+            const confirmDelete = confirm('Tem certeza que deseja deletar sua conta? Esta ação é irreversível.');
+            if (!confirmDelete) return;
+
+            try {
+                const response = await fetch(`/usuarios/${usuarioLogado.id}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    alert('Conta deletada com sucesso.');
+                    logout();
+                } else {
+                    alert('Erro ao deletar conta.');
+                }
+            } catch (error) {
+                alert('Erro de conexão.');
+            }
+        }
+
     </script>
 </body>
 </html>

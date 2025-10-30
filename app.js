@@ -3,7 +3,7 @@ const mysql = require('mysql2');
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'Frida123@kkk',
+    password: 'senai',
     database: 'devhub'
 });
 
@@ -113,6 +113,20 @@ app.post('/usuarios', (req, res) => {
     });
 });
 
+app.post('/usuarios/autenticar', (req, res) => {
+    const { nome, email, senha } = req.body;
+    const sql = 'SELECT * FROM usuarios WHERE nome = ? AND email = ? AND senha = ?';
+    connection.query(sql, [nome, email, senha], (err, result) => {
+        if (err) {
+            res.status(500).send('Erro ao autenticar usuário');
+        } else if (result.length === 0) {
+            res.status(401).send('Credenciais inválidas');
+        } else {
+            res.status(200).json(result[0]);
+        }
+    });
+});
+
 app.get('/usuarios', (req, res) => {
     const sql = 'SELECT * FROM usuarios';
     connection.query(sql, (err, result) => {
@@ -148,6 +162,7 @@ app.delete('/usuarios/:id', (req, res) => {
         }
     });
 });
+
 
 // Endpoints para posts
 app.post('/posts', (req, res) => {
