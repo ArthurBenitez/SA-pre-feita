@@ -1,23 +1,10 @@
-# 🚀 Projeto Node.js + Express + MySQL
+# 🚀 Projeto Node.js + Express + MySQL 
 
-Bem-vindo ao projeto!  
-Este é um servidor simples desenvolvido com **Node.js**, **Express** e **MySQL2**, ideal para testar conexões com banco de dados e criar suas primeiras rotas.
+## ⚙️ COMANDOS PARA A ANA RODAR ESSE PROJETO:
 
----
+### 1️⃣ CLONE COM O GIT CLONE
 
-## 🛠️ Tecnologias utilizadas
-
-- [Node.js](https://nodejs.org/)
-- [Express](https://expressjs.com/)
-- [MySQL2](https://www.npmjs.com/package/mysql2)
-
----
-
-## ⚙️ Como rodar o projeto
-
-Siga os passos abaixo para executar o projeto localmente 👇
-
-### 1️⃣ Clone o repositório
+### 2 - Rode os comandos dentro da pasta do projeto clonado:
 
 ```bash
-git clone https://github.com/seu-usuario/seu-repositorio.git
+npm i express mysql2 node app.js
